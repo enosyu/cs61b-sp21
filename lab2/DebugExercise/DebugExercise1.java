@@ -8,6 +8,9 @@ public class DebugExercise1 {
     public static int divideThenRound(int top, int bottom) {
         int quotient = top / bottom;
         int result = Math.round(quotient);
+        if (top % bottom * 2 > bottom) {
+            return result + 1;
+        }
         return result;
     }
 
