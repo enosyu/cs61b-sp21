@@ -1,6 +1,7 @@
 package deque;
 
 import jh61b.junit.In;
+import java.util.Iterator;
 
 public class LinkedListDeque<T> implements Deque<T> {
     private class IntNode {
