@@ -4,9 +4,9 @@ import jh61b.junit.In;
 
 public class LinkedListDeque<T> implements Deque<T> {
     private class IntNode {
-        public IntNode prev;
-        public T item;
-        public IntNode next;
+        private IntNode prev;
+        private T item;
+        private IntNode next;
 
         public IntNode(T i, IntNode n, IntNode p) {
             item = i;
@@ -27,23 +27,23 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     public LinkedListDeque(T item){
         sentinel = new IntNode(null, null, null);
-        sentinel.next = new IntNode(item, null,null);
+        sentinel.next = new IntNode(item, null, null);
         sentinel.prev = new IntNode(item, null, null);
         size = 1;
     }
 
-    public T getRecursive(int index){
-        IntNode n = sentinel;
-        if (index==0){
-            if(isEmpty()){
-                return null;
-            }
-            return n.prev.item;
-        }else{
-            n.next = n.next.next;
-            return getRecursive(index - 1);
-        }
-    }
+//    public T getRecursive(int index){
+//        IntNode n = sentinel;
+//        if (index == 0){
+//            if (isEmpty()){
+//                return null;
+//            }
+//            return n.prev.item;
+//         } else {
+//            n.next = n.next.next;
+//            return getRecursive(index - 1);
+//        }
+//    }
 
     @Override
     public void addFirst(T item){
@@ -67,7 +67,9 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     @Override
-    public int size(){ return size; }
+    public int size(){
+        return size;
+    }
 
     @Override
     public void printDeque(){
@@ -148,7 +150,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     */
 
     public boolean equals(Object o){
-        return false;
+        return o instanceof LinkedListDeque;
     }
 
 }
