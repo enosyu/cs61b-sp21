@@ -120,11 +120,15 @@ public class LinkedListDeque<T> implements Deque<T> {
         return p.item;
     }
 
-    /*
+
     public interface Iterator<T> {
         boolean hasNext();
         T next();
     }
+    public Iterator<T> iterator(){
+        return new LinkedListDequeIterator();
+    }
+
     private class LinkedListDequeIterator implements Iterator<T> {
         private int wizPos;
 
@@ -137,17 +141,12 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
 
         public T next() {
-            T returnItem = items[wizPos];
+            T returnItem = get(wizPos);
             wizPos += 1;
             return returnItem;
         }
     }
 
-
-    public Iterator<T> iterator(){
-        return new LinkedListDequeIterator();
-    }
-    */
 
     public boolean equals(Object o){
         return o instanceof LinkedListDeque;
