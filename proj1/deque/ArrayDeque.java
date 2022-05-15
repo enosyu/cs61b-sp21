@@ -1,24 +1,24 @@
 package deque;
 
-public class ArrayDeque<T> implements Deque<T>{
+public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
     private int size;
-    public ArrayDeque(){
-        T[] items = (T[]) new Object[8];
+    public ArrayDeque() {
+        T[] a = (T[]) new Object[8];
         size = 0;
     }
-    private void resize(int capacity){
-        T[] a = (T[])new Object[capacity];
+    private void resize(int capacity) {
+        T[] a = (T[]) new Object[capacity];
         System.arraycopy(items, 0, a, 0, size);
         items = a;
     }
 
     @Override
-    public void addFirst(T item){
-        if(size == items.length){
+    public void addFirst(T item) {
+        if (size == items.length) {
             resize((int) (size * 1.25));
         }
-        T[] a = (T[])new Object[size];
+        T[] a = (T[]) new Object[size];
         System.arraycopy(items, 0, a, 1, size);
         items[0] = item;
         items = a;
@@ -26,8 +26,8 @@ public class ArrayDeque<T> implements Deque<T>{
     }
 
     @Override
-    public void addLast(T item){
-        if(size == items.length){
+    public void addLast(T item) {
+        if (size == items.length) {
             resize((int) (size * 1.25));
         }
         items[size] = item;
@@ -40,49 +40,49 @@ public class ArrayDeque<T> implements Deque<T>{
     }
 
     @Override
-    public int size(){
+    public int size() {
         return size;
     }
 
     @Override
-    public void printDeque(){
-        for(int n = 0; n < size; n++){
+    public void printDeque() {
+        for (int n = 0; n < size; n++) {
             System.out.println(get(n).toString());
         }
     }
 
     @Override
-    public T removeFirst(){
-        if(size > items.length * 0.25){
+    public T removeFirst() {
+        if (size > items.length * 0.25) {
             resize((int) (size * 0.5));
         }
 
         T b = items[0];
-        T[] a = (T[])new Object[size];
+        T[] a = (T[]) new Object[size];
         System.arraycopy(items, 1, a, 0, size);
         items = a;
         size--;
         return b;
     }
 
-    private T getLast(){
+    private T getLast() {
         return items[size - 1];
     }
 
     @Override
-    public T removeLast(){
-        if(size > items.length * 0.25){
+    public T removeLast() {
+        if (size > items.length * 0.25) {
             resize((int) (size * 0.5));
         }
-       T b = getLast();
-       T[] a = (T[])new Object[size];
-       System.arraycopy(items, 0, a, 0, size - 1);
-       size--;
-       return b;
+        T b = getLast();
+        T[] a = (T[]) new Object[size];
+        System.arraycopy(items, 0, a, 0, size - 1);
+        size--;
+        return b;
     }
 
     @Override
-    public T get(int index){
+    public T get(int index) {
         return items[index];
     }
 
