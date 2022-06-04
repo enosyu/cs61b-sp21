@@ -1,11 +1,24 @@
 package deque;
 
+import java.util.Iterator;
+
 public class ArrayDeque<T> implements Deque<T> {
-    private T[] items;
+    @SuppressWarnings("unchecked")
+    private T[] items = (T[]) new Object[8];
     private int size;
+    private int nextFirst;
+    private int nextLast;
+
     public ArrayDeque() {
-        T[] a = (T[]) new Object[8];
         size = 0;
+        nextFirst = 3;
+        nextLast = 4;
+    }
+    public ArrayDeque(T item) {
+        items[3] = item;
+        size = 1;
+        nextFirst = 2;
+        nextLast = 4;
     }
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
@@ -84,6 +97,51 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public T get(int index) {
         return items[index];
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof ArrayDeque)) {
+            return false;
+        }
+        ArrayDeque<?> ad = (ArrayDeque<?>) o;
+        if (ad.size() != size) {
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            if (ad.get(i) != get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Iterator<T> iterator() {
+        return new ArrayDeque.ArrayDequeIterator();
+    }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int index;
+
+        ArrayDequeIterator() {
+            index = 0;
+        }
+
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        public T next() {
+            T returnItem = get(index);
+            index += 1;
+            return returnItem;
+        }
     }
 
 }

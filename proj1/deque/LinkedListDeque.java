@@ -15,46 +15,45 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
-    private final Node sentinel;
+    private final Node sentinel = new Node(null, null, null);;
     private int size;
 
     public LinkedListDeque() {
-        sentinel = new Node(null, null, null);
         sentinel.next = sentinel;
         sentinel.prev = sentinel;
         size = 0;
     }
 
     public LinkedListDeque(T item) {
-        sentinel = new Node(null, null, null);
         sentinel.next = new Node(item, null, null);
         sentinel.prev = sentinel.next;
         size = 1;
     }
-/**
+
     public T getRecursive(int index) {
         if (index < 0 || index > size - 1) {
             return null;
         }
-        return getRecursiveHelper(index - 1, );
+        return getRecursiveHelper(index - 1, sentinel.next);
     }
-    public T getRecursiveHelper(int index , Node p) {
+    public T getRecursiveHelper(int index, Node p) {
+        if (index == 0) {
+            return p.item;
+        }
+        return getRecursiveHelper(index, p.next);
+    }
 
-    }
-*/
     @Override
     public void addFirst(T item) {
-        Node n = sentinel.next;
-        sentinel.next = new Node(item, n, sentinel);
-        n.prev = sentinel.next;
+        sentinel.next = new Node(item, sentinel.next, sentinel);
+        sentinel.next.next.prev = sentinel.next;
         size = size + 1;
     }
 
     @Override
     public void addLast(T item) {
-        Node p = sentinel.prev;
-        sentinel.prev = new Node(item, sentinel, p);
-        p.next = sentinel.prev;
+        sentinel.prev = new Node(item, sentinel, sentinel.prev);
+        sentinel.prev.prev.next = sentinel.prev;
         size = size + 1;
     }
 
@@ -77,32 +76,26 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public T removeFirst() {
-        Node f = sentinel.next;
-        if (f == null) {
+        T item = sentinel.next.item;
+        if (isEmpty()) {
             return null;
         }
-        f.next.prev = sentinel;
-        sentinel.next = f.next;
+        sentinel.next = sentinel.next.next;
+        sentinel.next.prev = sentinel;
         size = size - 1;
-        if (size < 0) {
-            size = 0;
-        }
-        return f.item;
+        return item;
     }
 
     @Override
     public T removeLast() {
-        Node p = sentinel.prev;
-        if (p == null) {
+        T item = sentinel.prev.item;
+        if (isEmpty()) {
             return null;
         }
-        p.prev.next = sentinel;
-        sentinel.prev = p.prev;
+        sentinel.prev = sentinel.prev.prev;
+        sentinel.prev.next = sentinel;
         size = size - 1;
-        if (size < 0) {
-            size = 0;
-        }
-        return p.item;
+        return item;
     }
 
     @Override
@@ -138,6 +131,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             return returnItem;
         }
     }
+
     @Override
     public boolean equals(Object o) {
         if (o == null) {
@@ -161,14 +155,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return true;
 
     }
-    @Override
-    public int hashCode() {
-        int hashCode = 1;
-        for (Object o : this) {
-            hashCode = hashCode * 31;
-            hashCode = hashCode + o.hashCode();
-        }
-        return hashCode;
-    }
+
 
 }
