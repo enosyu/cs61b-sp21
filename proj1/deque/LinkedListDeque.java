@@ -15,7 +15,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
-    private final Node sentinel = new Node(null, null, null);;
+    private final Node sentinel = new Node(null, null, null);
     private int size;
 
     public LinkedListDeque() {
@@ -55,11 +55,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         sentinel.prev = new Node(item, sentinel, sentinel.prev);
         sentinel.prev.prev.next = sentinel.prev;
         size = size + 1;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return sentinel.next.item == null;
     }
 
     @Override

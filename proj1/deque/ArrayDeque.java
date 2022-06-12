@@ -14,42 +14,32 @@ public class ArrayDeque<T> implements Deque<T> {
         nextFirst = 3;
         nextLast = 4;
     }
+
     public ArrayDeque(T item) {
         items[3] = item;
         size = 1;
         nextFirst = 2;
         nextLast = 4;
     }
-    private void resize(int capacity) {
-        T[] a = (T[]) new Object[capacity];
-        System.arraycopy(items, 0, a, 0, size);
-        items = a;
-    }
 
     @Override
     public void addFirst(T item) {
-        if (size == items.length) {
-            resize((int) (size * 1.25));
-        }
-        T[] a = (T[]) new Object[size];
-        System.arraycopy(items, 0, a, 1, size);
-        items[0] = item;
-        items = a;
+        items[nextFirst] = item;
+        nextFirst -= 1;
         size++;
+        if (nextFirst == -1) {
+            resize(size * 2);
+        }
     }
 
     @Override
     public void addLast(T item) {
-        if (size == items.length) {
-            resize((int) (size * 1.25));
-        }
-        items[size] = item;
+        items[nextLast] = item;
+        nextLast += 1;
         size++;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return items[0] == null;
+        if (nextLast == items.length) {
+            resize(size * 2);
+        }
     }
 
     @Override
@@ -66,37 +56,52 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        if (size > items.length * 0.25) {
-            resize((int) (size * 0.5));
+        if (isEmpty()) {
+            return null;
         }
-
-        T b = items[0];
-        T[] a = (T[]) new Object[size];
-        System.arraycopy(items, 1, a, 0, size);
-        items = a;
-        size--;
-        return b;
-    }
-
-    private T getLast() {
-        return items[size - 1];
+        nextFirst += 1;
+        T item = items[nextFirst];
+        items[nextFirst] = null;
+        size -= 1;
+        shrinkSize();
+        return item;
     }
 
     @Override
     public T removeLast() {
-        if (size > items.length * 0.25) {
-            resize((int) (size * 0.5));
+        if (isEmpty()) {
+            return null;
         }
-        T b = getLast();
-        T[] a = (T[]) new Object[size];
-        System.arraycopy(items, 0, a, 0, size - 1);
-        size--;
-        return b;
+        nextLast -= 1;
+        T item = items[nextLast];
+        items[nextLast] = null;
+        size -= 1;
+        shrinkSize();
+        return item;
     }
-
+    @SuppressWarnings("unchecked")
+    private void resize(int s) {
+        T[] newItems = (T[]) new Object[s];
+        int firstPos = Math.abs(s - size) / 2;
+        System.arraycopy(items, nextFirst + 1, newItems, firstPos, size);
+        items = newItems;
+        nextFirst = firstPos - 1;
+        nextLast = firstPos + size;
+    }
+    private void shrinkSize() {
+        if (isEmpty()) {
+            resize(8);
+        } else if (items.length / 4 >= size && size >= 4) {
+            resize(size * 2);
+        }
+    }
     @Override
     public T get(int index) {
-        return items[index];
+        if (index < 0 || index > size - 1) {
+            return null;
+        }
+        int itemIndex = nextFirst + 1 + index;
+        return items[itemIndex];
     }
 
     @Override
@@ -123,7 +128,7 @@ public class ArrayDeque<T> implements Deque<T> {
     }
 
     public Iterator<T> iterator() {
-        return new ArrayDeque.ArrayDequeIterator();
+        return new ArrayDequeIterator();
     }
 
     private class ArrayDequeIterator implements Iterator<T> {
@@ -143,5 +148,4 @@ public class ArrayDeque<T> implements Deque<T> {
             return returnItem;
         }
     }
-
 }
